@@ -1,7 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-// import Home from './views/Home.vue';
-import login from './components/login/login.vue';
+import Login from './views/Login.vue';
+import Home from './views/Home.vue';
+import Joblist from './views/Joblist.vue';
+import Company from './views/Company.vue';
+import Message from './views/Message.vue';
+import Aboutme from './views/Aboutme.vue';
+import Register from './views/Register.vue';
 
 Vue.use(Router);
 
@@ -12,7 +17,40 @@ export default new Router({
     {
       path: '/',
       name: 'login',
-      component: login,
+      component: Login,
+    },
+    {
+      path: '/home',
+      name: 'home',
+      component: Home,
+      children: [
+        {
+          path: '/joblist',
+          name: 'joblist',
+          component: Joblist,
+        },
+        {
+          path: '/company',
+          name: 'company',
+          component: Company,
+        },
+        {
+          path: '/message',
+          name: '/message',
+          component: Message,
+        },
+        {
+          path: '/aboutme',
+          name: 'aboutme',
+          component: Aboutme,
+        },
+      ],
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: Register,
+
     },
     // {
     //   path: '/about',

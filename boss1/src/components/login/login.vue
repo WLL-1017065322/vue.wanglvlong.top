@@ -8,11 +8,18 @@
           <span class="login-btn2">短信登录</span>
         </div>
         <div class="info-login">
-          <input type="text">
-          <input type="text">
+          <input type="text" placeholder="手机号">
+          <input type="text" placeholder="密码">
           <input type="button" value="请向右滑动组件">
           <input type="button" value="登录">
         </div>
+
+        <!-- <div class="info-login">
+          <input type="text" value="手机号">
+          <input type="text" value="密码">
+          <input type="button" value="请向右滑动组件">
+          <input type="button" value="登录">
+        </div> -->
       </form>
 
       <!-- 底部 -->
@@ -83,6 +90,7 @@ export default {
         // width: 50%;
 
         @media (max-width: 800px) {
+          //============
           display: table-cell;
           width: 50%;
           text-align: center;
@@ -94,20 +102,37 @@ export default {
           color: #414a60;
         }
         .login-btn1 {
-            margin-left: 0;
-
+          margin-left: 0;
         }
         .login-btn2 {
-            text-align: center;
-            
+          text-align: center;
         }
-        
       }
       span:hover {
         color: #414a60;
-        
-        border-bottom-color: #62d5c8;
 
+        border-bottom-color: #62d5c8;
+      }
+    }
+    .info-login {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      input {
+        margin: 18px 0;
+        width: 100%;
+        height: 42px;
+      }
+    }
+  }
+
+  .login-footer {
+    text-align: center;
+    span {
+      color: #aaa;
+      font-size: 14px;
+      a {
+        color: #5dd5c8;
       }
     }
   }

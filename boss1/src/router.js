@@ -11,6 +11,9 @@ import Register from './views/Register.vue';
 Vue.use(Router);
 
 export default new Router({
+  // linkActiveClass: 'active', 有bug
+  linkExactActiveClass: 'router-link-active',
+
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [

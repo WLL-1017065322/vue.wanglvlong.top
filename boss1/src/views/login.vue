@@ -8,11 +8,10 @@
           <span class="login-btn2">短信登录</span>
         </div>
         <div class="info-login">
-          <input type="text" placeholder="手机号">
-          <input type="text" placeholder="密码">
+          <input type="text" placeholder="手机号" v-model="phoneNumber">
+          <input type="password" placeholder="密码" v-model="password">
           <input type="button" value="请向右滑动组件">
-          <input type="button" value="登录">
-           <router-link to="/home">登录</router-link>
+          <input type="button" value="登录" @click="login">
         </div>
 
         <!-- <div class="info-login">
@@ -20,7 +19,7 @@
           <input type="text" value="密码">
           <input type="button" value="请向右滑动组件">
           <input type="button" value="登录">
-        </div> -->
+        </div>-->
       </form>
 
       <!-- 底部 -->
@@ -37,10 +36,76 @@
 </template>
 
 <script>
+import axios from "axios";
+import { setTimeout } from "timers";
 export default {
   name: "",
+  data() {
+    return {
+      isLogin: false,
+      phoneNumber: "",
+      password: "",
+      accounts: [],
+      swiperList: [],
+
+      apiAhoneNumber: "",
+      apiPassword: ""
+    };
+  },
   props: {
     msg: String
+  },
+  methods: {
+    login() {
+      //登录请求
+      // 登陆时与api里的账号密码比较
+      for (let i = 0; i < this.accounts.length; i++) {
+        if (
+          this.accounts[i].phoneNumber == this.phoneNumber &&
+          this.accounts[i].password == this.password
+        ) {
+          // 设置登录状态
+          this.isLogin = true;
+          // return this.$router.push('/joblist')
+          setTimeout(() => {
+            let expireDays = 1000*60*60*24;//过期
+            this.setCookie('session','bababa...',expireDays);
+            this.isLogin = false;
+            this.$router.push('/joblist');
+          },3000);
+        }
+      }
+      // return alert("1");
+    },
+    getLoginApi() {
+      axios
+        .get("api/001.json", {
+          // params:{
+          //   id: this.$route.params.id,
+          // }
+        })
+        .then(this.handleGetLoginApi);
+    },
+    handleGetLoginApi(res) {
+      res = res.data;
+      if (res.ret && res.data) {
+        const data = res.data;
+        // this.swiperList = data.swiperList;
+        // console.log(JSON.parse(JSON.stringify(this.swiperList)));
+        this.accounts = data.account;
+        // this.accounts = JSON.parse(JSON.stringify(this.accounts));
+
+        // console.log(JSON.parse(JSON.stringify(this.accounts)));
+        // console.log(this.accounts)
+
+        // console.log(typeof res.data.account)
+      }
+    }
+  },
+
+  mounted() {
+    console.log("1");
+    this.getLoginApi();
   }
 };
 </script>

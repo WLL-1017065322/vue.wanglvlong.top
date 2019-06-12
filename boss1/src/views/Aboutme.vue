@@ -94,6 +94,7 @@
         </div>
       </div>
     </section>
+      <button style="color:red;" @click="logout">退出登录</button>
 
     <footer>
       <div class="content">
@@ -110,9 +111,26 @@
 </template>
 
 <script>
+import { setTimeout } from 'timers';
 export default {
   data() {
-    return {};
+    return {
+      isLogouting:false,
+    };
+  },
+  methods: {
+    // 注销
+    logout(){
+        this.isLogouting = true;
+        this.delCookie('session');
+        
+        // this.$router.push('/');
+        setTimeout(()=>{
+          this.$router.push('/');
+          this.isLogouting = false;
+        },3000)
+
+    }
   },
   components: {}
 };

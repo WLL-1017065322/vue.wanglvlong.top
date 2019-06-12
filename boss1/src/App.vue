@@ -8,6 +8,49 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: "app",
+  data() {
+    return {
+      isLogin: false,
+      userInfo: {
+        //用户信息
+      }
+    };
+  },
+  watch: {
+    //如果路由变化，执行函数
+    $route: "checkLogin"
+  },
+  mounted() {
+    this.checkLogin();
+
+    this.getUserInfo();
+  },
+
+  methods: {
+    getUserInfo() {
+      // 提交mutation
+      this.$store.commit("updateUserInfo", this.userInfo);
+    },
+    checkLogin() {
+      console.log("2");
+
+      console.log(this.$route.path);
+      //检测是否存在session
+      if (!this.getCookie("session")) {
+        this.$router.push("/");
+      } else {
+        this.$router.push(this.$route.path);
+        // this.$router.push(this.$route.path)
+      }
+    }
+  }
+};
+</script>
+
+
 <style lang="scss">
 // #app {
 //   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -31,6 +74,4 @@
   margin: 0;
   padding: 0;
 }
-
-
 </style>

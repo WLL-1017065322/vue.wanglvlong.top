@@ -20,19 +20,19 @@
 
     <section>
       <ul>
-        <li>
+        <li v-for="item in jobList" :key="item.id">
           <a href="#/detail/0" class>
-            <img src="../assets/images/mayun.jpg" alt>
+            <img :src="item.src" alt>
             <div class="text">
               <div class="title">
-                <h4>web前端</h4>
-                <span>7-8k</span>
+                <h4>{{item.need_job}}</h4>
+                <span>{{item.job_money}}</span>
               </div>
-              <div class="name">文鹏系统研发中心</div>
+              <div class="name">{{item.company}}</div>
               <div class="msg">
-                <span>上海</span>
-                <span>应届生</span>
-                <span>大专</span>
+                <span>{{item.con_place}}</span>
+                <span>{{item.seniority}}</span>
+                <span>{{item.education}}</span>
               </div>
             </div>
           </a>
@@ -43,11 +43,58 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
-    return {};
+    return {
+      jobList: [],
+      // items: [
+      //   {
+      //     id: "001",
+      //     uesrname: "zhangsan",
+      //     password: "123",
+      //     phoneNumber: "1"
+      //   },
+      //   {
+      //     id: "002",
+      //     uesrname: "lisi",
+      //     password: "123",
+      //     phoneNumber: "2"
+      //   },
+      //   {
+      //     id: "003",
+      //     uesrname: "admin",
+      //     password: "123",
+      //     phoneNumber: "3"
+      //   }
+      // ]
+    };
   },
-  components: {}
+  components: {},
+  methods: {
+    getJobListApi() {
+      axios
+        .get("/api/data/joblist.json")
+        .then(res => {
+          console.log(res);
+          if (res.data.code == "0") {
+            // this.jobList == res.data.main
+            // console.log(this.jobList)
+            console.log(this);
+          }
+
+          this.jobList = res.data.main;
+          console.log(this.jobList)
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    }
+  },
+  mounted() {
+    this.getJobListApi();
+
+  }
 };
 </script>
 

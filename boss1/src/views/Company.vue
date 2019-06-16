@@ -12,24 +12,24 @@
 
       <section>
         <ul>
-          <li class="clear">
+          <li class="clear" v-for="item in companyList" :key="item.id">
             <div class="left">
-              <img src="../assets/images/logo_1.jpg" alt>
+              <img :src="item.comp_pic" alt>
             </div>
             <div class="right">
-              <h4>文思海辉</h4>
-              <span class="address">上海市黄浦区</span>
+              <h4>{{item.comp_name}}</h4>
+              <span class="address">{{item.comp_address}}</span>
               <p>
-                <span>IT软件</span>
+                <span>{{item.comp_nature}}</span>
                 <span>|</span>
-                <span>不需要融资</span>
+                <span>{{item.comp_stock}}</span>
                 <span>|</span>
-                <span>10000人以上</span>
+                <span>{{item.comp_people}}</span>
               </p>
               <div class="rezhao">
                 热招:
-                <span style="color: rgb(118, 213, 207);">前端工程师</span>等
-                <span>2086</span>个职位
+                <span style="color: rgb(118, 213, 207);">{{item.hot_pos_name}}</span>等
+                <span>{{item.hot_pos_no}}</span>个职位
                 <span class="icon-right pull-right"></span>
               </div>
             </div>
@@ -41,11 +41,32 @@
 </template>
 
 <script>
+import Axios from "axios";
 export default {
   data() {
-    return {};
+    return {
+      companyList: []
+    };
   },
-  components: {}
+  components: {},
+  methods: {
+    getCompanyListApi() {
+      Axios.get("/api/data/comdetail.json")
+        .then(res => {
+          if (res.data.code=="200"){
+            this.companyList=res.data.company
+            console.log(this.companyList)
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  },
+  mounted(){
+    this.getCompanyListApi();
+  }
+
 };
 </script>
 
@@ -95,7 +116,6 @@ div {
     }
 
     section {
-
       ul {
         padding: 20px 10px;
         li {
@@ -106,12 +126,10 @@ div {
             margin: 30px;
             width: 50px;
             height: 50px;
-            img{
+            img {
               width: 100%;
               height: 100%;
             }
-
-
           }
 
           .right {
@@ -141,17 +159,11 @@ div {
               height: 53.75px;
               padding: 18.38px 0;
               letter-spacing: 1px;
-              border-top: .5px solid #e5e5e5;
-
+              border-top: 0.5px solid #e5e5e5;
             }
-
-
-
           }
-
         }
       }
-
     }
   }
 }

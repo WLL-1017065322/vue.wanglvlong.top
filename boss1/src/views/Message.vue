@@ -2,30 +2,30 @@
   <div>
     <header>
       <div class="center">
-        <div class="left">聊天</div>
-        <div class="right">互动</div>
+        <div class="left" @click="isOn=true" :class="{on:isOn}">聊天</div>
+        <div class="right" @click="isOn=false" :class="{on:!isOn}">互动</div>
       </div>
     </header>
 
     <section>
-      <div class="chat">
+      <div class="chat" v-show="isOn">
         <div class="chat-top">
           <div class="left">联系人</div>
           <div class="right">极速处理</div>
         </div>
 
         <ul class="chat-content">
-          <li>
+          <li v-for="item in messageList" :key="item.id">
             <div class="left">
-              <img src="../assets/images/mayun.jpg" alt>
+              <img :src="item.chat_img" alt>
             </div>
             <div class="right">
               <h4>
-                <span>李大</span>
-                <span class="time">时间</span>
+                <span>{{item.chat_name}}</span>
+                <span class="time">{{item.chat_time}}</span>
               </h4>
-              <span class="company">美团|经理</span>
-              <span class="message">抱歉</span>
+              <span class="company">{{item.chat_title[0]}}||{{item.chat_title[1]}}</span>
+              <span class="message">{{item.chat_msg.chat_msg_detial[item.chat_msg.chat_msg_status]}}</span>
             </div>
           </li>
 
@@ -45,46 +45,29 @@
         </ul>
       </div>
 
-      <div class="hudong">
+      <div class="hudong" v-show="!isOn">
         <ul class="hudong-nav">
-          <li>对我感兴趣</li>
+          <!-- <li>对我感兴趣</li>
           <li>看过我</li>
-          <li>新职位</li>
+          <li>新职位</li>-->
+          <li v-for="(item,index) in toggleHudong" :key="item.id" @click="huDongNavClick(item,index)" :class="{on:index===current}">{{item.title}}</li>
         </ul>
 
         <div class="hudong-content">
           <ul>
-            <li>
+            <li v-for="item in interactiveList[huDongIndex]" :key="item.id">
               <a href="#/detail/0" class>
-                <img src="../assets/images/mayun.jpg" alt>
+                <img :src="item.comp_pic" alt>
                 <div class="text">
                   <div class="title">
-                    <h4>web前端</h4>
-                    <span>7-8k</span>
+                    <h4>{{item.hot_pos_name}}</h4>
+                    <span>{{item.end_time}}</span>
                   </div>
-                  <div class="name">文鹏系统研发中心</div>
+                  <div class="name">{{item.comp_name}}</div>
                   <div class="msg">
-                    <span>上海</span>
-                    <span>应届生</span>
-                    <span>大专</span>
-                  </div>
-                </div>
-              </a>
-            </li>
-
-            <li>
-              <a href="#/detail/0" class>
-                <img src="../assets/images/mayun.jpg" alt>
-                <div class="text">
-                  <div class="title">
-                    <h4>web前端</h4>
-                    <span>7-8k</span>
-                  </div>
-                  <div class="name">文鹏系统研发中心</div>
-                  <div class="msg">
-                    <span>上海</span>
-                    <span>应届生</span>
-                    <span>大专</span>
+                    <span>{{item.seniority}}</span>
+                    <span>{{item.education}}</span>
+                    <span>{{item.job_money}}</span>
                   </div>
                 </div>
               </a>
@@ -97,11 +80,66 @@
 </template>
 
 <script>
+import Axios from "axios";
 export default {
   data() {
-    return {};
+    return {
+      isOn: true,
+      isOnNav: true,
+      current:0,
+      messageList: [],
+      interactiveList: [],
+      huDongIndex: 0,
+      //互动切换
+
+      toggleHudong: [
+        {
+          title: "对我感兴趣",
+          huDongNumber: 0,
+          isOn: true
+        },
+        {
+          title: "看过我",
+          huDongNumber: 1,
+          isOn: false
+        },
+        {
+          title: "新职位",
+          huDongNumber: 2,
+          isOn: false
+        }
+      ]
+    };
   },
-  components: {}
+  methods: {
+    getMessageApi() {
+      Axios.get("/api/data/message.json")
+        .then(res => {
+          console.log(res.data.data.chat.chat_lists);
+          if (res.data.code == "0") {
+            this.messageList = res.data.data.chat.chat_lists;
+            // console.log(this.messageList)
+            this.interactiveList = res.data.data.interactive;
+          }
+          // console.log(this.messageList);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    huDongNavClick(item,index) {
+      this.huDongIndex = item.huDongNumber;
+      this.current = index;
+      // console.log(index)
+    }
+  },
+  components: {},
+  created() {
+    this.getMessageApi();
+  },
+  mounted() {
+    // console.log(isOn)
+  }
 };
 </script>
 
@@ -125,6 +163,10 @@ div {
         text-align: center;
         color: #fff;
       }
+      div.on {
+        color: #53cac3;
+        background: #fff;
+      }
     }
   }
 
@@ -133,7 +175,7 @@ div {
     padding-bottom: 10px;
     // background: #fff;
     .chat {
-      display: none;
+      // display: none;
       background: #fff;
       .chat-top {
         width: 100%;
@@ -144,6 +186,8 @@ div {
         justify-content: space-between;
 
         .left {
+          background: #fff;
+          color: #53cac3;
         }
         .right {
           margin: 5px 0;
@@ -222,6 +266,9 @@ div {
         li {
           height: 100%;
           width: 33%;
+        }
+        li.on {
+          border-bottom: 1px solid #53cac3;
         }
       }
 

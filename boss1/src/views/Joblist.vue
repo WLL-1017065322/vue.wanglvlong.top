@@ -10,11 +10,19 @@
       </div>
       <nav>
         <ul>
-          <li>推荐</li>
-          <li>上海</li>
-          <li>公司</li>
-          <li>要求</li>
+          <li
+            v-for="(item,index) in navList"
+            :key="item.id"
+            @click="navClick(index)"
+            :class="{selected:current===index}"
+          >{{item.title}}</li>
         </ul>
+        <!-- <recommend-com v-show="current===navList[0].id&&ison"></recommend-com>
+        <location-com v-show="current===navList[1].id&&ison"></location-com>
+        <company-com v-show="current===navList[2].id&&ison"></company-com>
+        <require-com v-show="current===navList[3].id&&ison"></require-com>-->
+
+        <component v-bind:is="currentComponent"></component>
       </nav>
     </header>
 
@@ -44,10 +52,38 @@
 
 <script>
 import axios from "axios";
+import recommendCom from "../components/job/recommend";
+import companyCom from "../components/job/company";
+import locationCom from "../components/job/location";
+import requireCom from "../components/job/require";
 export default {
   data() {
     return {
+      current: null,
       jobList: [],
+      currentComponent: "",
+      navList: [
+        {
+          title: "推荐",
+          id: 0,
+          com: "recommendCom"
+        },
+        {
+          title: "上海",
+          id: 1,
+          com: "locationCom"
+        },
+        {
+          title: "公司",
+          id: 2,
+          com: "companyCom"
+        },
+        {
+          title: "要求",
+          id: 3,
+          com: "requireCom"
+        }
+      ]
       // items: [
       //   {
       //     id: "001",
@@ -70,7 +106,12 @@ export default {
       // ]
     };
   },
-  components: {},
+  components: {
+    recommendCom,
+    companyCom,
+    locationCom,
+    requireCom
+  },
   methods: {
     getJobListApi() {
       axios
@@ -84,16 +125,24 @@ export default {
           }
 
           this.jobList = res.data.main;
-          console.log(this.jobList)
+          console.log(this.jobList);
         })
         .catch(function(error) {
           console.log(error);
         });
+    },
+    navClick(index) {
+      if (index != this.current) {
+        this.current = index;
+        this.currentComponent = this.navList[index].com;
+      }else{
+        this.current = null;
+        this.currentComponent = "";
+      }
     }
   },
   mounted() {
     this.getJobListApi();
-
   }
 };
 </script>
@@ -101,6 +150,9 @@ export default {
 <style scoped lang="scss">
 div {
   header {
+    width: 100%;
+    position: fixed;
+
     .top {
       display: flex;
       justify-content: space-between;
@@ -130,6 +182,9 @@ div {
           font-size: 12px;
           // cursor: pointer;
         }
+        li.selected {
+          color: #53cac3;
+        }
         li:nth-child(1)::after,
         li:nth-child(2)::after,
         li:nth-child(3)::after {
@@ -141,11 +196,15 @@ div {
           left: 100%;
         }
       }
+      recommend-com {
+      }
     }
   }
 
   section {
-    padding: 20px 15px;
+    padding: 110px 15px;
+
+    margin-bottom: 30px;
     ul {
       list-style: none;
       li {

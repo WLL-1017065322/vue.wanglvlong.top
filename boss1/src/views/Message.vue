@@ -173,6 +173,7 @@ div {
   section {
     padding-top: 50px;
     padding-bottom: 10px;
+    margin-bottom: 30px;
     // background: #fff;
     .chat {
       // display: none;

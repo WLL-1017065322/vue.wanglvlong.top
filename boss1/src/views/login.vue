@@ -116,6 +116,8 @@ export default {
   position: fixed;
   width: 100%;
   height: 100%;
+  padding-top: 30px;
+  background: #fff;
   // background: linear-gradient(to bottom, #a46e92 0%,#27455d 100%)
   h3 {
     color: #5dd5c8;
@@ -128,6 +130,8 @@ export default {
   }
 
   form {
+    padding-top: 20px;
+    margin: 0 15px;
     .login-btn {
       display: flex;
       justify-content: space-between;
@@ -189,6 +193,12 @@ export default {
         margin: 18px 0;
         width: 100%;
         height: 42px;
+      }
+
+      input:nth-child(4){
+        background: #5dd5c8;
+        border: 0;
+        color: #fff;
       }
     }
   }

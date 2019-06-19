@@ -202,7 +202,7 @@ div {
   }
 
   section {
-    padding: 110px 15px;
+    padding: 110px 15px 50px;
 
     margin-bottom: 30px;
     ul {

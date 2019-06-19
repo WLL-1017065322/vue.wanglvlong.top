@@ -34,13 +34,17 @@ export default {
       // 提交mutation
       this.$store.commit("updateUserInfo", this.userInfo);
     },
-    checkLogin() {
-      console.log("2");
 
+    // 网页拦截
+    checkLogin() {
       console.log(this.$route.path);
       //检测是否存在session
       if (!this.getCookie("session")) {
-        this.$router.push("/");
+        if (this.$route.path == "/register") {
+          this.$router.push("/register");
+        } else {
+          this.$router.push("/");
+        }
       } else {
         this.$router.push(this.$route.path);
         // this.$router.push(this.$route.path)

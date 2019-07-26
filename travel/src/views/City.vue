@@ -1,7 +1,8 @@
 <template>
   <div>
     <city-header></city-header>
-    <city-search :cities="cities"></city-search>
+    <city-search :cities="cities"></city-search> 
+    <!-- 父子传值 cities -->
     <city-list
         :cities="cities"
         :hot="hotCities"
@@ -9,6 +10,7 @@
     <city-alphabet
         :cities="cities"
         @change="handleLetterChange"></city-alphabet>
+        <!-- 子父传值 触发事件 -->
   </div>
 </template>
 <script>

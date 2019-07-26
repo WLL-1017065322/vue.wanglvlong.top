@@ -84,7 +84,7 @@ export default {
       // ]
     };
   },
-  computed: {
+  computed: {// 一个屏幕 8个
     pages() {
       const pages = [];
       this.list.forEach((item, index) => {

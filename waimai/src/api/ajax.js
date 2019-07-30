@@ -9,12 +9,14 @@ import axios from 'axios';
  * @param data
  * @returns {Promise}
  */
-export default function ajax(url = '', data={}, type = 'GET') {
+export default function ajax(url = '', params = {}, type = 'GET') {
   return new Promise((resolve, reject) => {
     if (type === 'GET') {
       // 处理 data 待定===========
       axios
-        .get(url)
+        .get(url, {
+          params,
+        })
         .then((response) => {
           resolve(response.data);
         })
@@ -23,7 +25,7 @@ export default function ajax(url = '', data={}, type = 'GET') {
         });
     } else {
       axios
-        .post(url)
+        .post(url, params)
         .then((response) => {
           resolve(response.data);
         })

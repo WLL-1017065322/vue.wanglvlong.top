@@ -4,16 +4,16 @@
             <div class="login_header">
                 <h2 class="login_logo">Mint外卖</h2>
                 <div class="login_header_title">
-                    <a href="javascript:;" :class="{on:true}">短信登录</a>
-                    <a href="javascript:;" :class="{on:false}">密码登录</a>
+                    <a href="javascript:;" :class="{on:isPhone}" @click="isPhone=true">短信登录</a>
+                    <a href="javascript:;" :class="{on:!isPhone}" @click="isPhone=false">密码登录</a>
                 </div>
             </div>
             <div class="login_content">
-                <form action="">
-                    <div :class="{on: false}">
+                <form action="" @submit.prevent="login">
+                    <div :class="{on: isPhone}">
                         <section class="login_message">
                             <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
-                            <button class="get_verification"></button>
+                            <button class="get_verification" :disabled="!rightPhone" :class="{right_phone:rightPhone}" @click.prevent="sendCode">{{computeTime>0?`(${computeTime}s)已发送` : '获取验证码'}}</button>
                         </section>
                         <section class="login_verification">
                             <input type="tel" maxlength="8" placeholder="验证码" v-model="code">
@@ -24,22 +24,22 @@
                         </section>
                     </div>
 
-                    <div :class="{on: true}">
+                    <div :class="{on: !isPhone}">
                         <section>
                             <section class="login_message">
                                 <input type="text" maxlength="11" placeholder="手机/邮箱/用户名" v-model="name">
                             </section>
                             <section class="login_verification">
-                                <input type="text" maxlength="8" placeholder="密码" v-if="false" v-model="pwd">
+                                <input type="text" maxlength="8" placeholder="密码" v-if="showPwd" v-model="pwd">
                                 <input type="password" maxlength="8" placeholder="密码" v-else v-model="pwd">
-                                <div class="switch_button off">
-                                <div class="switch_circle"></div>
-                                <span class="switch_text"></span>
+                                <div class="switch_button off" :class="showPwd?'on':'off'" @click="showPwd=!showPwd">
+                                <div class="switch_circle" :class="{right: showPwd}"></div>
+                                <span class="switch_text">{{showPwd ? 'abc' : '...'}}</span>
                                 </div>
                             </section>
                             <section class="login_message">
                                 <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
-                                <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha">
+                                <img class="get_verification" src="http://localhost:4000/captcha" alt="captcha" @click="getCaptcha" ref="captcha">
                             </section>
                         </section>
                     </div>
@@ -52,27 +52,153 @@
                 <i class="iconfont icon-arrow-left"></i>
             </a>
         </div>
+        <alert-tip :alertText="alertText" v-show="alertShow" @closeTip_login="closeAlert"></alert-tip>
 
     </section>
 </template>
 
 <script>
- export default {
-   data () {
-     return {
-         phone: '',
-         code: '',
-         name: '',
-         pwd: '',
-         captcha: '',
+import { setInterval, clearInterval } from 'timers';
+import { reqSendCode, reqSmsLogin, reqPwdLogin } from '../api/index';
+import AlertTip from '../components/AlertTip/AlertTip';
+// 组件引入, import components , 标签
+export default {
+  data() {
+    return {
+      phone: '',
+      code: '',
+      name: '',
+      pwd: '',
+      captcha: '', // 验证码
+      isPhone: true, // 是否选择短信登录
+      computeTime: 0, // 发送验证码的倒计时
+      showPwd: true, // 是否显示面膜
+      alertShow: false, // 是否显示提示框
+      alertText: '', // 提示框信息
 
 
-     }
-   },
-   components: {
+    };
+  },
+  computed: {
+    //  正则匹配
+    rightPhone() {
+      // 利用正则对手机号进行匹配，返回布尔值
+      return /^1\d{10}$/.test(this.phone);
+      // ^1(3|4|5|7|8)\d{9}$
+      // 表示以1开头，第二位可能是3/4/5/7/8等的任意一个，在加上后面的\d表示数字[0-9]的9位，总共加起来11位结束。
+    },
+  },
+  methods: {
+    //  获取 短信验证码
+    async sendCode() {
+      //  没有计时
+      if (!this.computeTime) {
+        this.computeTime = 30;
+        this.intervalId = setInterval(() => {
+          this.computeTime--;
+          if (this.computeTime <= 0) {
+            //  停止计时
+            clearInterval(this.intervalId);
+          }
+        }, 1000);
+      }
+      //  发送ajax请求--向指定手机号发送验证码短信
+      const result = await reqSendCode(this.phone);
+      if (result.code === 1) {
+        // 验证失败
+        // 显示提示
+        this.showAlert('手机号验证失败');
+        // 停止计时
+        if (this.computeTime) {
+          this.computeTime = 0;
+          clearInterval(this.intervalId);
+          this.intervalId = undefined;
+        }
+      }
+    },
+    //  登录
+    async login() {
+      let result;
+      // 前台表单验证
+      if (this.isPhone) {
+        // 短信登录
+        const { phone, code } = this;
+        if (!this.rightPhone) {
+          // 手机号不正确
+          this.showAlert('手机号不正确');
+          return;
+        } if (!/^\d{6}$/.test(code)) { // 验证码是6位
+          this.showAlert('验证码不是6位');
+          return;
+        }
+        // 发送ajax请求短信登陆
+        result = await reqSmsLogin(phone, code);
 
-   }
- }
+        // 密码登录
+      } else {
+        const { name, pwd, captcha } = this;
+        if (!this.name) {
+          // 用户名必须指定
+          this.showAlert('用户名必须指定');
+          return;
+        } if (!this.pwd) {
+          // 密码必须指定
+          this.showAlert('密码必须指定');
+          return;
+        } if (!this.captcha) {
+          // 验证码必须指定
+          this.showAlert('验证码必须指定');
+          return;
+        }
+        // 发送ajax请求密码登陆
+        result = await reqPwdLogin({ name, pwd, captcha });
+      }
+
+      // 停止计时
+      // if (this.computeTime) {
+      //   this.computeTime = 0
+      //   clearInterval(this.intervalId)
+      //   this.intervalId = undefined
+      // }
+
+      console.log(result);
+      // 根据结果处理数据
+      if (result.code === 0) {
+        const user = result.data;
+        // 将user保存到state中
+        // this.$store.dispatch('recodeUser',user)
+        // 去个人中心
+        this.$router.replace('/aboutMe');
+      } else {
+        // 显示新的图像验证码
+        this.getCaptcha();
+        // 显示警告提示
+        const { msg } = result;
+        this.showAlert(msg);
+      }
+    },
+    // 获取图片验证码
+    getCaptcha() {
+      // 每次指定的src要不一样
+      this.$refs.captcha.src = `http://localhost:4000/captcha?time=${Date.now()}`;
+    },
+
+    // 关闭提示框
+    closeAlert() {
+      this.alertShow = false;
+      this.alertText = '';
+    },
+    // 显示提示框
+    showAlert(alertText) {
+      this.alertShow = true;
+      this.alertText = alertText;
+    },
+
+  },
+  components: {
+    AlertTip,
+  },
+};
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

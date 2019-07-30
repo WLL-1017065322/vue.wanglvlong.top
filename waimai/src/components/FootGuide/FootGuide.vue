@@ -1,12 +1,12 @@
 <template>
  <footer class="footer_guide">
-      
+
       <!-- <router-link to="/main">Main</router-link> |
       <router-link to="/search">search</router-link> |
       <router-link to="/order">order</router-link> |
       <router-link to="/aboutme">aboutme</router-link> | -->
 
-      <router-link to="/main" class="guide_item"> 
+      <router-link to="/main" class="guide_item">
           <span class="item_icon">
               <i class="iconfont icon-food"></i>
           </span>
@@ -33,22 +33,22 @@
           </span>
           <span>我的</span>
       </router-link>
-    
+
 
  </footer>
 </template>
 
 <script>
- export default {
-   data () {
-     return {
+export default {
+  data() {
+    return {
 
-     }
-   },
-   components: {
+    };
+  },
+  components: {
 
-   }
- }
+  },
+};
 </script>
 
 
@@ -67,7 +67,7 @@
   width 100%
   height 50px
   display flex
- 
+
   .guide_item
     display flex
     flex 1

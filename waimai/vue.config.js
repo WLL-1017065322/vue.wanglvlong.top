@@ -1,15 +1,20 @@
 module.exports = {
+  // publicPath: './',
+  // outputDir: 'dist',
+  // assetsDir: 'public',
   devServer: {
     open: true,
     host: 'localhost',
-    // host: '192.168.186.1',
+    // host: 'vue.wanglvlong.top',
     port: 8080,
     https: false,
     // 以上的ip和端口是我们本机的;下面为需要跨域的
     proxy: {
       // 配置跨域
       '/api': {
-        target: 'http://localhost:4000', // 这里后台的地址模拟的;应该填写你们真实的后台接口
+        target: 'http://localhost:4000',
+        // 这里后台的地址模拟的;应该填写你们真实的后台接口
+        // target: 'http://vue.wanglvlong.top:4000/',
         ws: true,
         changOrigin: true, // 允许跨域
         pathRewrite: {

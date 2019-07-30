@@ -2,7 +2,7 @@
  <div class="aboutme">
    <section class="profile">
    <header-top title="我的"></header-top>
-   <section class="profile-number">  
+   <section class="profile-number">
      <!-- 利用router-link实现到Login组件的跳转 -->
      <router-link to="/login" class="profile-link" >
        <div class="profile_image">
@@ -95,29 +95,27 @@
         <mt-button type="danger" style="width: 100%" v-if="ison">退出登录</mt-button>
       </section>
       </section>
-    
 
 
- 
- 
  </div>
 </template>
 
 <script>
-import HeaderTop from '../components/HeaderTop/HeaderTop'
-import { MessageBox, Toast } from 'mint-ui'
- export default {
-   data () {
-     return {
-       ison: false
+import { MessageBox, Toast } from 'mint-ui';
+import HeaderTop from '../components/HeaderTop/HeaderTop';
 
-     }
-   },
-   components: {
-     HeaderTop
+export default {
+  data() {
+    return {
+      ison: false,
 
-   }
- }
+    };
+  },
+  components: {
+    HeaderTop,
+
+  },
+};
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
   @import '../common/common.styl'

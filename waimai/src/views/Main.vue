@@ -51,43 +51,43 @@
 </template>
 
 <script>
-import HeaderTop from "../components/HeaderTop/HeaderTop";
-import ShopList from "../components/ShopList/ShopList";
-import axios from "axios";
+import axios from 'axios';
 
-//组件中使用swiper
-import { swiper, swiperSlide } from "vue-awesome-swiper";
-import Swiper from "swiper";
+// 组件中使用swiper
+import { swiper, swiperSlide } from 'vue-awesome-swiper';
+import Swiper from 'swiper';
 // require styles
-import "swiper/dist/css/swiper.css";
-import { mapState } from "vuex";
+import 'swiper/dist/css/swiper.css';
+import { mapState } from 'vuex';
+import ShopList from '../components/ShopList/ShopList';
+import HeaderTop from '../components/HeaderTop/HeaderTop';
 
-import {ajax} from '../api/ajax.js';
+import { ajax } from '../api/ajax.js';
 
 export default {
   data() {
     return {
       userInfo: {
-        _id: 1
+        _id: 1,
       },
 
       categoryArr: [],
-      baseImageUrl: "https://fuss10.elemecdn.com"
+      baseImageUrl: 'https://fuss10.elemecdn.com',
     };
   },
   components: {
     HeaderTop,
     ShopList,
     swiper,
-    swiperSlide
+    swiperSlide,
   },
   computed: {
-    ...mapState(["address","categorys"]),
-    //一个屏幕8个icon
+    ...mapState(['address', 'categorys']),
+    // 一个屏幕8个icon
     pages() {
       const pages = [];
       this.categorys.forEach((item, index) => {
-        const page = Math.floor(index / 8); //向下取整 页码
+        const page = Math.floor(index / 8); // 向下取整 页码
         if (!pages[page]) {
           pages[page] = [];
         }
@@ -95,19 +95,19 @@ export default {
       });
       return pages;
     },
-    
+
     // address(){
     //   return this.$store.state.address
     // }
   },
 
   mounted() {
-      this.$store.dispatch('getAddress')
-      this.$store.dispatch('getCategorys')
+    this.$store.dispatch('getAddress');
+    this.$store.dispatch('getCategorys');
 
     // 测试
     // axios.get("/api/index_category").then(response => console.log(response));
-    // ajax("/api/index_category").then(response => console.log(response)); 
+    // ajax("/api/index_category").then(response => console.log(response));
 
     // $fetch:封装
     // this.$ajax("/api/index_category").then(response => {
@@ -115,7 +115,7 @@ export default {
     //   this.categoryArr = response.data;
     // });
 
-    //轮播 失效
+    // 轮播 失效
     // var mySwiper = new Swiper('.swiper-container', {
     // autoplay:true,
     // loop:true,
@@ -124,7 +124,7 @@ export default {
     // },
     // })
   },
-  //解决轮播失效bug
+  // 解决轮播失效bug
   watch: {
     pages(value) {
       // categorys数组中有数据了 但界面还没有异步更新
@@ -145,20 +145,20 @@ export default {
       // 在修改数据之后立即使用它，然后等待 DOM 更新。
       this.$nextTick(() => {
         // 一旦完成界面更新, 立即执行回调
-        new Swiper(".swiper-container", {
+        new Swiper('.swiper-container', {
           autoplay: true,
           pagination: {
-            el: ".swiper-pagination",
-            clickable: true
-          }
+            el: '.swiper-pagination',
+            clickable: true,
+          },
         });
 
         // new BScroll('.miste-content-wrapper', {
         //   click: true
         // })
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
@@ -294,5 +294,3 @@ export default {
   }
 }
 </style>
-
-

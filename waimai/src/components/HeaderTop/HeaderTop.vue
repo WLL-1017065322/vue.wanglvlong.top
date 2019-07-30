@@ -1,31 +1,31 @@
 <template>
   <header class="header">
  <!-- 插槽是父组件与子组件的通讯方式，子组件中的slot可以显示父组件传递给子组件的内容 -->
-    <slot name="left"></slot>   
+    <slot name="left"></slot>
     <span class="header_title">
       <span class="header_title_text ellipsis">{{title}}</span>
     </span>
-    <slot name="right"></slot>   
+    <slot name="right"></slot>
 
 
   </header>
 </template>
 
 <script>
- export default {
-   data () {
-     return {
+export default {
+  data() {
+    return {
 
-     }
-   },
-   props: {
-     title: String,
-     default: 'ceshi'
-   },
-   components: {
+    };
+  },
+  props: {
+    title: String,
+    // default: ceshi,
+  },
+  components: {
 
-   }
- }
+  },
+};
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
@@ -69,4 +69,3 @@
       .header_login_text
         color #fff
 </style>
-

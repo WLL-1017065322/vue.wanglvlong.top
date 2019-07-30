@@ -13,7 +13,11 @@ import './mock/mockServer';
 
 // require styles
 import 'swiper/dist/css/swiper.css'; // <mt-button>
+// 引入css
+import './assets/css/reset.css';
 
+// 加载过滤器
+import './filters/index';
 // FastClick.attach(document.body)
 // Vue.config.productionTip = false
 
@@ -44,6 +48,12 @@ Vue.component(Button.name, Button);
 
 new Vue({
   router,
+  // watch: {
+  // 检测路由变化
+  //   '$route.path': function (newVal, oldVal) {
+  //     console.log(newVal);
+  //   },
+  // },
   store,
   render: h => h(App),
 }).$mount('#app');

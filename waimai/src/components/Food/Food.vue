@@ -28,29 +28,29 @@
 </template>
 
 <script>
-import CartControl from '../CartControl/CartControl.vue'
+import CartControl from '../CartControl/CartControl.vue';
 
 export default {
   props: {
-    food: Object
+    food: Object,
   },
 
-  data () {
+  data() {
     return {
-      isShow: false
-    }
+      isShow: false,
+    };
   },
 
   methods: {
-    toggleShow () {
-      this.isShow = !this.isShow
-    }
+    toggleShow() {
+      this.isShow = !this.isShow;
+    },
   },
 
   components: {
-    CartControl
-  }
-}
+    CartControl,
+  },
+};
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>

@@ -12,18 +12,19 @@
 </template>
 
 <script>
-import HeaderTop from '../components/HeaderTop/HeaderTop'
- export default {
-   data () {
-     return {
+import HeaderTop from '../components/HeaderTop/HeaderTop';
 
-     }
-   },
-   components: {
-     HeaderTop
+export default {
+  data() {
+    return {
 
-   }
- }
+    };
+  },
+  components: {
+    HeaderTop,
+
+  },
+};
 </script>
 
 

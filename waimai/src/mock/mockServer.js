@@ -6,7 +6,7 @@ import data from './data.json';
 // 返回接口
 Mock.mock('/goods', { code: 0, data: data.goods });
 
-Mock.mock('/rating', { code: 0, data: data.ratings });
+Mock.mock('/ratings', { code: 0, data: data.ratings });
 
 Mock.mock('/info', { code: 0, data: data.info });
 

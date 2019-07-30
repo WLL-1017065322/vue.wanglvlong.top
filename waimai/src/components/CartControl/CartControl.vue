@@ -1,31 +1,40 @@
 <template>
  <div class="cartcontrol">
      <transition name="move">
-         <div class="iconfont icon-removecircleoutline" v-if="food.count"></div>
+       <!-- 减号 -->
+       <!-- 防止事件冒泡 修饰符stop -->
+         <div class="iconfont icon-removecircleoutline" v-if="food.count" @click.stop="updateFoodCount(false)"></div>
 
      </transition>
+     <!-- 数字 -->
      <div class="cart-count" v-if="food.count">{{food.count}}</div>
-     <div class="iconfont icon-addcircle"></div>
+     <!-- 加号 -->
+     <div class="iconfont icon-addcircle" @click.stop="updateFoodCount(true)"></div>
 
 
  </div>
 </template>
 
 <script>
- export default {
-   data () {
-     return {
-         
+export default {
+  data() {
+    return {
 
-     }
-   },
-   components: {
 
-   },
-   props: {
-       food: Object
-   }
- }
+    };
+  },
+  components: {
+
+  },
+  methods: {
+    updateFoodCount(isAdd) {
+      this.$store.dispatch('updataFoodCount', { isAdd, food: this.food });
+    },
+  },
+  props: {
+    food: Object,
+  },
+};
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

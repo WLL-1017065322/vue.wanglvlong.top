@@ -1,7 +1,7 @@
 <template>
  <div class="shop_container">
    <ul class="shop_list">
-     <li class="shop_li" border-1px v-for="(item,index) in shops" :key="index" @click="$router.push('/shop')">
+     <li class="shop_li" border-1px v-for="(item,index) in shops" :key="index" @click="routerLinkTo">
        <a href="">
          <div class="shop_left">
            <img :src="baseImgUrl+item.image_path" alt="" class="shop_img">
@@ -27,7 +27,7 @@
                <section class="shop_rating_order_right">
                  <span class="delivery_style delivery_right ">{{item.delivery_mode.text}}</span>
                </section>
-             
+
            </section>
            <section class="shop_distance">
                <p class="shop_delivery_msg">
@@ -44,31 +44,38 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import Star from '../Star/Star'
- export default {
-   data () {
-     return {
-       shopList:[],
-       baseImgUrl: 'https://raw.githubusercontent.com/W-Qing/Vue-MintShop/master/mintshop-client/src/components/ShopList/images/',
+import { mapState } from 'vuex';
+import Star from '../Star/Star';
 
-     }
-   },
-   components: {
-     Star
-   },
-   computed: {
-     ...mapState(['shops']),
+export default {
+  data() {
+    return {
+      shopList: [],
+      baseImgUrl: 'https://raw.githubusercontent.com/W-Qing/Vue-MintShop/master/mintshop-client/src/components/ShopList/images/',
 
-   },
-   mounted(){
-     this.$store.dispatch('getShops')
-      // this.$fetch("/api/shops").then(response => {
-      // console.log(response.data);
-      // this.shopList = response.data;
+    };
+  },
+  components: {
+    Star,
+  },
+  computed: {
+    ...mapState(['shops']),
+
+  },
+  methods: {
+    routerLinkTo(){
+      this.$router.push('/shop')
+    }
+  },
+  
+  mounted() {
+    this.$store.dispatch('getShops');
+    // this.$fetch("/api/shops").then(response => {
+    // console.log(response.data);
+    // this.shopList = response.data;
     // });
-   }
- }
+  },
+};
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

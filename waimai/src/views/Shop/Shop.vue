@@ -22,19 +22,22 @@
 </template>
 
 <script>
-import ShopHeader from '../../components/ShopHeader/ShopHeader'
+import ShopHeader from '../../components/ShopHeader/ShopHeader';
 
 
- export default {
-   data () {
-     return {
+export default {
+  data() {
+    return {
 
-     }
-   },
-   components: {
-       ShopHeader,
-     
-   },
+    };
+  },
+  mounted() {
+    this.$store.dispatch('getShopInfo');
+  },
+  components: {
+    ShopHeader,
+
+  },
   //  mounted(){
   //    this.$fetch("/api/index_category").then(response => {
   //     // console.log(response.data);
@@ -43,8 +46,7 @@ import ShopHeader from '../../components/ShopHeader/ShopHeader'
   //  }
 
 
-
- }
+};
 </script>
 
 

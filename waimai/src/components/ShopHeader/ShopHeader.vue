@@ -1,13 +1,13 @@
 <template>
   <div class="shop-header">
     <nav class="shop-nav" :style="{backgroundImage: `url(${info.bgImg})`}">
-      <a href class="back">
+      <a href class="back" @click="$router.push('/')">
         <!-- icon图标处理了======= -->
         <i class="iconfont icon-arrow_left"><</i>
       </a>
     </nav>
     <!-- 到距离结束 -->
-    <div class="shop-content">
+    <div class="shop-content" @click="toggleShopShow">
       <img :src="info.avatar" alt class="content-image" />
       <div class="header-content">
         <h2 class="content-title">
@@ -29,7 +29,7 @@
       </div>
     </div>
     <!-- 首单开始 -->
-    <div class="shop-header-discounts" v-if="info.supports">
+    <div class="shop-header-discounts" v-if="info.supports" @click="toggleSupportShow">
       <div class="discounts-left">
         <div class="activity">
           <span class="content-tag">
@@ -39,12 +39,12 @@
         </div>
       </div>
       <div class="discounts-right">{{info.supports.length}}个优惠</div>
-      
+
     </div>
     <!-- 过渡动画  header点击的幻灯片效果-->
     <transition name="fade">
         <!-- 节目显示,隐藏 -->
-      <div class="shop-brief-modal" v-show="false"> 
+      <div class="shop-brief-modal" v-show="shopShow">
         <div class="brief-modal-content">
             <!-- 品牌 和店名 -->
           <h2 class="content-title">
@@ -85,7 +85,7 @@
               {{info.bulletin}}
           </div>
           <!-- x键 -->
-          <div class="mask-footer">
+          <div class="mask-footer" @click="toggleShopShow">
               <span class="iconfont icon-close"></span>
           </div>
         </div>
@@ -97,7 +97,7 @@
 
     <!-- 优惠活动列表显示 -->
     <transition name="fade">
-        <div class="activity-sheet" v-show="false">
+        <div class="activity-sheet" v-show="supportShow">
             <div class="activity-sheet-content">
                 <h2 class="activity-sheet-title">优惠活动</h2>
                 <ul class="list">
@@ -111,7 +111,7 @@
                     </li>
                 </ul>
                 <!-- 关闭按钮 -->
-                <div class="activity-sheet-close">
+                <div class="activity-sheet-close" @click="toggleSupportShow">
                     <span class="iconfont icon-close"></span>
                 </div>
             </div>
@@ -125,16 +125,19 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
+
 export default {
   data() {
     return {
+      shopShow: false,
+      supportShow: false,
       // info: [],
       infoSupports: [],
       //  属性待定
-      infoSupportsName: "首单",
-      infoSupportsContent: "新用户下单立减17元(不与其它活动同享)",
-      supportClasses: ['activity-green', 'activity-red', 'activity-orange','activity-green', 'activity-red', 'activity-orange','activity-green', 'activity-red', 'activity-orange','activity-green', 'activity-red', 'activity-orange'],
+      infoSupportsName: '首单',
+      infoSupportsContent: '新用户下单立减17元(不与其它活动同享)',
+      supportClasses: ['activity-green', 'activity-red', 'activity-orange', 'activity-green', 'activity-red', 'activity-orange', 'activity-green', 'activity-red', 'activity-orange', 'activity-green', 'activity-red', 'activity-orange'],
     };
   },
   //    computed: {
@@ -148,11 +151,22 @@ export default {
   //        }
 
   //    },
-  computed:{
-    ...mapState(['info'])
+  computed: {
+    ...mapState(['info']),
+  },
+  methods: {
+    goBack() {
+      // this.$router.push('/')
+    },
+    toggleShopShow() {
+      this.shopShow = !this.shopShow;
+    },
+    toggleSupportShow() {
+      this.supportShow = !this.supportShow;
+    },
   },
   mounted() {
-    this.$store.dispatch('getShopInfo')
+    this.$store.dispatch('getShopInfo');
   },
   // mounted() {
   //   this.$fetch("/info").then(response => {
@@ -163,10 +177,9 @@ export default {
   //   // console.log(this.info.supports)
   //   });
   // },
-  components: {}
+  components: {},
 };
 </script>
-
 
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>

@@ -7,7 +7,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    categorys:[],//食品分类数组
+    categorys: [], // 食品分类数组
   },
   mutations: {
     // RECEIVE_CATEGORYS = 'receive_categorys' // 接收分类数组

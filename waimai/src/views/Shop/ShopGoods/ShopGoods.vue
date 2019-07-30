@@ -5,7 +5,7 @@
       <div class="menu-wrapper">
         <!-- 左边的食物分类列表 -->
         <ul>
-          <li class="menu-item" v-for="(good,index) in goods" :key="index">
+          <li class="menu-item" v-for="(good,index) in goods" :key="index" :class="{current: index===currentIndex}" @click="clickMenuItem(index)">
             <span class="text bottom-border-1px">
               <img :src="good.icon" alt class="icon" v-if="good.icon" />
               {{good.name}}
@@ -17,7 +17,7 @@
       <div class="foods-wrapper">
         <!-- 右侧的食物列表是根据左侧的分类列表展现的
         所以右侧是在一个分类标题列表里面嵌套着各类食物列表-->
-        <ul>
+        <ul ref="foodsRight">
           <li class="food-list-hook" v-for="(good,index) in goods" :key="index">
             <h1 class="title">{{good.name}}</h1>
             <ul>
@@ -32,20 +32,21 @@
                 <div class="content">
                   <h2 class="name">{{food.name}}</h2>
                   <p class="desc">{{food.description}}</p>
-                
+
                   <div class="extra">
                    <span class="count">月售{{food.sellCount}}份</span>
                     <span>好评率{{food.rating}}%</span>
                  </div>
                   <div class="price">
                     <span class="now">￥{{food.price}}</span>
-                   <span class="old" v-if="false">￥{{food.oldPrice}}</span>
+                   <span class="old" v-if="food.oldPrice">￥{{food.oldPrice}}</span>
                  </div>
-                </div>
-                <div class="cartcontrol-wrapper">
+                 <div class="cartcontrol-wrapper">
                   <!-- 插入组件:最右边的 + 号 -->
                   <CartControl :food="food"></CartControl>
                 </div>
+                </div>
+
               </li>
             </ul>
           </li>
@@ -62,41 +63,108 @@
 </template>
 
 <script>
-import CartControl from '../../../components/CartControl/CartControl'
-import Food from '../../../components/Food/Food'
-import ShopCart from '../../../components/ShopCart/ShopCart'
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
+import BScroll from '@better-scroll/core';
+import CartControl from '../../../components/CartControl/CartControl';
+import Food from '../../../components/Food/Food';
+import ShopCart from '../../../components/ShopCart/ShopCart';
+
 export default {
   data() {
     return {
       // goods: [],
       food: {},
+      scrollY: 0,
+      tops: [],
     };
   },
   components: {
     CartControl,
     Food,
-    ShopCart
+    ShopCart,
   },
-  computed:{
-    ...mapState(['goods'])
+  computed: {
+    ...mapState(['goods']),
+    currentIndex() {
+      const { scrollY, tops } = this;
+      // console.log(Array.isArray(tops))
+      // 当前的scrollY和top比较
+      const index = tops.findIndex((top, index) => scrollY >= top && scrollY < tops[index + 1]);
+      return index;
+    },
   },
   methods: {
+
     showFood(food) {
-      this.food = food
-      this.$refs.food.toggleShow()
-      // 
-    }
+      this.food = food;
+      // 显示food组件 (在父组件中调用子组件对象的方法)
+      this.$refs.food.toggleShow();
+      // 一般是事件方法
+    },
+    _initScroll() {
+      new BScroll('.menu-wrapper', {
+        click: true,
+      });
+      this.foodsScroll = new BScroll('.foods-wrapper', {
+        probeType: 3,
+        click: true,
+
+      });
+      // 给右侧列表绑定scroll监听
+      this.foodsScroll.on('scroll', ({ x, y }) => {
+        // console.log(x,y)
+        this.scrollY = Math.abs(y);
+      });
+      // 给右侧列表绑定scroll结束的监听  probeType: 2 :解决滑动不更新的bug
+      // this.foodsScroll.on('scrollEnd', ({x, y}) => {
+      //   // console.log('scrollEnd', x, y)
+      //   this.scrollY = Math.abs(y)
+      // })
+    },
+    _initTop() {
+      // 获取 top的li的各个高度
+      const tops = [];
+      let top = 0;
+      // tops第一个值是0
+      tops.push(top);
+      const foodLis = this.$refs.foodsRight.children;
+      // foodLis 是类数组,对象 需要Array.prototype.slice.call(arrayLike)转化
+      // console.log(foodLis)
+      // console.log(Array.isArray(foodLis))
+      Array.prototype.slice.call(foodLis).forEach((li) => {
+        // console.log(li.clientHeight)
+        top += li.clientHeight;
+        tops.push(top);
+      });
+      // console.log(tops)
+      // 更新tops
+      this.tops = tops;
+    },
+    // 左边点击滑动
+    clickMenuItem(index) {
+      const scrollY = this.tops[index];
+      // this.scrollY = scrollY
+      this.foodsScroll.scrollTo(0, -scrollY, 300);
+    },
+
 
   },
   mounted() {
     // mock模拟数据
-    this.$store.dispatch('getShopGoods')
+    this.$store.dispatch('getShopGoods', () => {
+      this.$nextTick(() => {
+        // new BScroll('.menu-wrapper')
+        // new BScroll('.foods-wrapper')
+        // 初始化滚动
+        this._initScroll();
+        this._initTop();
+      });
+    });
     // this.$fetch("/goods").then(response => {
     //   this.goods = response.data;
     //   console.log(response.data);
     // });
-  }
+  },
 };
 </script>
 

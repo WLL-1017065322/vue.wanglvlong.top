@@ -57,9 +57,13 @@ export default new Router({
 
     {
       path: '/ceshi',
-      name: 'FootGuide',
       component: ceshi,
     },
+    // {
+    //   path: '/ceshiT',
+    //   component: ceshiT,
+    // },
+
     {
       path: '/login',
       name: 'Login',
@@ -67,7 +71,7 @@ export default new Router({
     },
     {
       path: '/shop',
-      name: 'Shop',
+      // name: 'Shop', 也就是说在 子路由 里如有有默认路由的话，父路由不需要设置 name 字段
       component: Shop,
       children: [
         { path: '/shop/goods', component: ShopGoods },

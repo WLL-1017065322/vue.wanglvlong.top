@@ -14,9 +14,9 @@
      </div>
    </div>
    <!-- 缓存路由组件对象 -->
-   <!-- <keep-alive> -->
+   <keep-alive>
      <router-view></router-view>
-   <!-- </keep-alive> -->
+   </keep-alive>
 
  </div>
 </template>

@@ -3,8 +3,8 @@
  */
 import ajax from './ajax';
 
-const BASE_URL = '/api';
-// const BASE_URL = 'http://vue.wanglvlong.top:4000';
+// const BASE_URL = '/api';
+const BASE_URL = 'http://vue.wanglvlong.top:4000';
 // 获取地址信息 {根据经纬度}
 export const reqAddress = geohash => ajax(`${BASE_URL}/position/${geohash}`);
 // console.log(reqAddress(""));

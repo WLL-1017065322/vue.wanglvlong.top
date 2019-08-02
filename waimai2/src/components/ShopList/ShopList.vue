@@ -1,8 +1,8 @@
 <template>
  <div class="shop_container">
    <ul class="shop_list">
-     <li class="shop_li" border-1px v-for="(item,index) in shops" :key="index" @click="routerLinkTo">
-       <a href="">
+     <li class="shop_li" border-1px v-for="(item,index) in shops" :key="index" @click="$router.push('/shop')">
+       <a>
          <div class="shop_left">
            <img :src="baseImgUrl+item.image_path" alt="" class="shop_img">
          </div>
@@ -50,7 +50,6 @@ import Star from '../Star/Star';
 export default {
   data() {
     return {
-      shopList: [],
       baseImgUrl: 'https://raw.githubusercontent.com/W-Qing/Vue-MintShop/master/mintshop-client/src/components/ShopList/images/',
 
     };
@@ -63,13 +62,13 @@ export default {
 
   },
   methods: {
-    routerLinkTo(){
-      this.$router.push('/shop')
-    }
+    // routerLinkTo(){
+    //   this.$router.push('/login')
+    // }
   },
   
   mounted() {
-    this.$store.dispatch('getShops');
+    // this.$store.dispatch('getShops');
     // this.$fetch("/api/shops").then(response => {
     // console.log(response.data);
     // this.shopList = response.data;

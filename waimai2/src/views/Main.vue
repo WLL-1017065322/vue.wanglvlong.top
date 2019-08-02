@@ -23,7 +23,7 @@
           style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);"
         >
           <div class="swiper-slide" v-for="(page,index) in pages" :key="index">
-            <a href class="link_to_food" v-for="(item,index) in page" :key="index">
+            <a href="javascript:" class="link_to_food" v-for="(item,index) in page" :key="index">
               <div class="food_container">
                 <img :src="baseImageUrl+item.image_url" alt srcset />
               </div>
@@ -104,6 +104,7 @@ export default {
   mounted() {
     this.$store.dispatch('getAddress');
     this.$store.dispatch('getCategorys');
+    this.$store.dispatch('getShops')
 
     // 测试
     // axios.get("/api/index_category").then(response => console.log(response));

@@ -1,6 +1,6 @@
 module.exports = {
-  // publicPath: './',
-  // outputDir: 'dist',
+  publicPath: './',
+  outputDir: 'dist',
   // assetsDir: 'public',
   devServer: {
     open: true,
@@ -12,9 +12,9 @@ module.exports = {
     proxy: {
       // 配置跨域
       '/api': {
-        target: 'http://localhost:4000',
+        // target: 'http://localhost:4000',
         // 这里后台的地址模拟的;应该填写你们真实的后台接口
-        // target: 'http://vue.wanglvlong.top:4000/',
+        target: 'http://vue.wanglvlong.top:4000/',
         ws: true,
         changOrigin: true, // 允许跨域
         pathRewrite: {

@@ -1,7 +1,8 @@
 <template>
   <div class="shop-header">
     <nav class="shop-nav" :style="{backgroundImage: `url(${info.bgImg})`}">
-      <a href class="back" @click="$router.push('/')">
+      <!-- <a href class="back" @click="$router.push('/')"> -->
+      <a class="back" @click="$router.back()">
         <!-- icon图标处理了======= -->
         <i class="iconfont icon-arrow_left"><</i>
       </a>
